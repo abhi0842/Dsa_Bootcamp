@@ -99,4 +99,21 @@ public class BST {
         Node right=buildtree(Arrays.copyOfRange(preorder,index+1,preorder.length),Arrays.copyOfRange(inorder,index+1,inorder.length));
         return root;
     }
+    public  int pathsum(BinaryTree.Node root){
+        helper(root);
+        return ans;
+    }
+    int ans=Integer.MIN_VALUE;
+    public  int helper(BinaryTree.Node root){
+        if(root==null){
+            return 0;
+        }
+        int left=helper(root.left);
+        int right=helper(root.right);
+        left=Math.max(0,left);
+        right=Math.max(0,right);
+        int pathsum=left+right+root.data;
+        ans=Math.max(ans,pathsum);
+        return Math.max(left,right)+ root.data;
+    }
 }
