@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class graphs_1 {
     static class Edge{
@@ -114,12 +112,52 @@ public static boolean cycle(ArrayList<Edge> graph[],boolean res[],boolean vis[],
         res[curr]=false;
         return false;
 }
+public static void helpertopsort(ArrayList<Edge> [] graph, boolean vis[], int curr, Stack<Integer> stack){
+        vis[curr]=true;
+        for(int i=0;i<graph[curr].size();i++){
+            Edge e=graph[curr].get(i);
+            if(!vis[e.des]){
+                helpertopsort(graph,vis,e.des,stack);
+            }
+        }
+        stack.push(curr);
+}
+public static void topsort(ArrayList<Edge> [] graph,int V){
+        boolean vis[]=new boolean[V];
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                helpertopsort(graph,vis,i,stack);
+            }
+        }
+        while(!stack.isEmpty()){
+            System.out.print(stack.pop()+" ")  ;
+        }
+
+}
+public static boolean undirectedcycle(ArrayList<Edge> graph[],boolean vis[],int curr,int par) {
+        vis[curr]=true;
+        for (int i=0;i<graph[curr].size();i++){
+            Edge e=graph[curr].get(i);
+            if(vis[e.des]&&par!= e.des){
+                return true;
+            }
+            else if(!vis[e.des]){
+                if(undirectedcycle(graph,vis,e.des,curr)){
+                    return true;
+                }
+            }
+
+}
+        return false;
+    }
+
     public static void main(String[] args) {
-        int v=7;
-        ArrayList<Edge> graph[]=new ArrayList[v];
-        create(graph );
- boolean vis[]=new boolean[v];
-        boolean res[]=new boolean[v];
+        int v = 7;
+        ArrayList<Edge> graph[] = new ArrayList[v];
+        create(graph);
+        boolean vis[] = new boolean[v];
+        boolean res[] = new boolean[v];
 //        for(int i=0;i<v;i++){
 //            if(vis[i]==false){
 //                bfs(graph,v,i,vis);
@@ -129,9 +167,12 @@ public static boolean cycle(ArrayList<Edge> graph[],boolean res[],boolean vis[],
 //        System.out.println();
 
         //allpath(graph,1,5,"",vis);
-        System.out.println(cycle(graph,res,vis,0));
-
-}
+        //   System.out.println(cycle(graph,res,vis,0));
+//
+// topsort(graph,v);
+        System.out.println(undirectedcycle(graph,vis,0,-1));
     }
+}
+
 
 
